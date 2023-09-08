@@ -1,6 +1,4 @@
-This is a possible README.md file for the code:
-
-# Copy Files
+# Copy and Organize Files
 
 This is a Python script that copies files from a source folder to a destination folder based on their modification dates. The script uses the [jdatetime](https://pypi.org/project/jdatetime/) module to convert the Gregorian dates to the Persian (Jalali) calendar.
 
