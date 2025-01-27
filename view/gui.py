@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import Tk
-from tkinter.filedialog import askdirectory
 from models.copy_model import CopyModel
 
 
