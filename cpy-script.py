@@ -39,7 +39,7 @@ def copy_files(src_folder, dest_folder):
         shutil.copy2(src_file_path, dest_persian_month_folder)
 
 
-src_folder = "D:\Camera"
-dest_folder = "D:\Personal"
+src_folder = "E:\Camera"
+dest_folder = "E:\Personal"
 
 copy_files(src_folder, dest_folder)
