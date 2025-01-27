@@ -3,7 +3,6 @@ from customtkinter import *
 from tkinter.filedialog import askdirectory
 import logging
 from view.gui_logger import TextHandler
-from controllers.copy_controller import CopyController
 
 class GUIArchitect():
     def __init__(self, root, controller):

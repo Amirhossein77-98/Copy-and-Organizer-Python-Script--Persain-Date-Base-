@@ -3,6 +3,7 @@ import shutil
 from datetime import datetime
 import jdatetime
 import logging
+from controllers.copy_controller import CopyController
 
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
@@ -19,9 +20,12 @@ def _copy_machine(filename, src_file_path, dest_folder):
     print(log_message)
     logging.info(log_message)
     try:
+        raise PermissionError
         shutil.copy2(src_file_path, dest_folder)
+        return True
     except PermissionError:
-        pass
+        CopyController.error_message(title="Permission Denied", msg="Your system doesn't give access to this folder.")
+        return False
     
 class CopyModel:
     @staticmethod
@@ -43,7 +47,9 @@ class CopyModel:
             if not os.path.exists(dest_persian_month_folder):
                 os.makedirs(dest_persian_month_folder)
             
-            _copy_machine(filename, src_file_path, dest_persian_month_folder)
+            result = _copy_machine(filename, src_file_path, dest_persian_month_folder)
+            if result == False:
+                return
 
     @staticmethod
     def copy_and_organize_files_georgian_order(src_folder, dest_folder):
@@ -61,10 +67,14 @@ class CopyModel:
             if not os.path.exists(dest_ad_month_folder):
                 os.mkdir(dest_ad_month_folder)
             
-            _copy_machine(filename, src_file_path, dest_ad_month_folder)
+            result = _copy_machine(filename, src_file_path, dest_ad_month_folder)
+            if result == False:
+                return
 
     @staticmethod
     def simple_bulk_copy(src_folder, dest_folder):
         for filename in os.listdir(src_folder):
             src_file_path = os.path.join(src_folder, filename)
-            _copy_machine(filename, src_file_path, dest_folder)
+            result = _copy_machine(filename, src_file_path, dest_folder)
+            if result == False:
+                return

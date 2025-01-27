@@ -1,3 +1,7 @@
+from tkinter import *
+from tkinter import Tk
+from tkinter import messagebox
+
 class CopyController:
     def __init__(self, model, view):
         self.model = model
@@ -11,3 +15,7 @@ class CopyController:
     
     def new_bulk_copy(self, source_path, destination_path):
         self.model.simple_bulk_copy(source_path, destination_path)
+
+    @staticmethod
+    def error_message(title, msg):
+        messagebox.showerror(title=title, message=msg)
