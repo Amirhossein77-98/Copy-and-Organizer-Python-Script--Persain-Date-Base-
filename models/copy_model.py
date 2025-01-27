@@ -7,7 +7,7 @@ logging.basicConfig(filename='copy.log', level=logging.INFO)
 
 class CopyModel:
     @staticmethod
-    def copy_files(src_folder, dest_folder):
+    def copy_and_organize_files_shamsi_order(src_folder, dest_folder):
         for filename in os.listdir(src_folder):
             src_file_path = os.path.join(src_folder, filename)
             modification_time = os.path.getmtime(src_file_path)
@@ -15,8 +15,8 @@ class CopyModel:
             ad_year = modification_date.year
             ad_month = modification_date.month
             ad_day = modification_date.day
+            
             persian_date = jdatetime.date.fromgregorian(year=ad_year, month=ad_month, day=ad_day)
-
             persian_year = persian_date.year
             persian_month = persian_date.month
             persian_day = persian_date.day
@@ -38,3 +38,29 @@ class CopyModel:
             logging.info(log_message)
 
             shutil.copy2(src_file_path, dest_persian_month_folder)
+
+    @staticmethod
+    def copy_and_organize_files_georgian_order(src_folder, dest_folder):
+        for filename in os.listdir(src_folder):
+            src_file_path = os.path.join(src_folder, filename)
+            modification_time = os.path.getmtime(src_file_path)
+            modification_date = datetime.fromtimestamp(modification_time)
+            
+            ad_year = modification_date.year
+            ad_month = modification_date.month
+            ad_day = modification_date.day
+
+            ad_month_name = modification_date.strftime("%B")
+
+            destination_ad_year_folder = os.path.join(dest_folder, str(ad_year))
+            if not os.path.exists(destination_ad_year_folder):
+                os.mkdir(destination_ad_year_folder)
+
+            destination_ad_month_folder = os.path.join(destination_ad_year_folder, str(ad_month_name))
+            if not os.path.exists(destination_ad_month_folder):
+                os.mkdir(destination_ad_month_folder)
+            
+            log_message = f"{datetime.now()} - Copying {filename} to {destination_ad_month_folder}"
+            print(log_message)
+            logging.info(log_message)
+            shutil.copy2(src_file_path, destination_ad_month_folder)

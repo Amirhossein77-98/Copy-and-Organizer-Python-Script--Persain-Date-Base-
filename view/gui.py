@@ -39,7 +39,11 @@ class GUIArchitect():
         destination_entry.insert(0, self.DESTINATION_PATH)
 
     def _copy_ignite(self):
-        CopyModel.copy_files(self.SOURCE_PATH, self.DESTINATION_PATH)
+        if self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Shamsi)":
+            CopyModel.copy_and_organize_files_shamsi_order(self.SOURCE_PATH, self.DESTINATION_PATH)
+        elif self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Georgian)":
+            CopyModel.copy_and_organize_files_georgian_order(self.SOURCE_PATH, self.DESTINATION_PATH)
+
 
     def main_window_builder(self):
         self.root.title("Organizer Script")
@@ -100,8 +104,11 @@ class GUIArchitect():
 
         operation_mode_label = CTkLabel(frame, text="Mode:")
         operation_mode_label.grid(row=3, column=0, sticky="W", padx=10)
-        self.operation_mode = CTkComboBox(frame, variable=self.COMBOBOX_VALUE, values=["Simple Bulk Copy", "Copy & Organize (Shamsi)", "Copy & Organize (Georgian)"],
-                                     state='readonly')
+        self.operation_mode = CTkComboBox(frame,
+                                     variable=self.COMBOBOX_VALUE,
+                                     values=["Simple Bulk Copy", "Copy & Organize (Shamsi)", "Copy & Organize (Georgian)"],
+                                     state='readonly',
+                                     width=205)
         self.operation_mode.grid(row=3, column=1, sticky="W")
         
         
