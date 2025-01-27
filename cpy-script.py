@@ -1,10 +1,9 @@
-from tkinter import Tk, Frame
-from tkinter.filedialog import askdirectory
+from tkinter import Tk
 from view.gui import GUIArchitect
 
 def main():
     root = Tk()
-    architect = GUIArchitect(root)
+    GUIArchitect(root)
     root.mainloop()
 
 main()

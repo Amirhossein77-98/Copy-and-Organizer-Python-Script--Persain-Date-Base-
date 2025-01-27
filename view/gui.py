@@ -15,10 +15,14 @@ class GUIArchitect():
         self.root.rowconfigure(1, weight=1)
         self.root.minsize(600, 400)
         self.root.maxsize(600, 400)
-        frame = Frame(self.root)
-        frame.grid(column=0, row=0)
-        self.add_labels(frame)
-        self.add_buttons(frame)
+        input_frame = Frame(self.root)
+        input_frame.grid(column=0, row=0)
+        self.add_labels(input_frame)
+        self.add_buttons(input_frame)
+        output_frame = Frame(self.root, bg="black")
+        output_frame.grid(column=0, row=1)
+        title = Label(output_frame, text="Copy Script")
+        title.grid(sticky="EW")
 
     def add_labels(self, frame):
         title = Label(frame, text="Copy Script")
