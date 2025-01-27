@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import Tk
 from tkinter.filedialog import askdirectory
+from models.copy_model import CopyModel
 
 class GUIArchitect():
     def __init__(self, root):
@@ -21,6 +22,9 @@ class GUIArchitect():
         self.DESTINATION_PATH = destination
         destination_entry.delete(0, 'end')
         destination_entry.insert(0, self.DESTINATION_PATH)
+
+    def copy_ignite(self):
+        CopyModel.copy_files(self.SOURCE_PATH, self.DESTINATION_PATH)
 
     def main_window_builder(self):
         self.root.title("Organizer Script")
@@ -66,7 +70,7 @@ class GUIArchitect():
         choose_destination_btn = Button(frame, text="Browse", command=lambda: self.destination_picker(destination_entry))
         choose_destination_btn.grid(row=1, column=2)
         
-        start_button = Button(frame, text="Start!")
+        start_button = Button(frame, text="Copy!", command=self.copy_ignite)
         start_button.grid(row=2, column=1)
 
     def output_frame_config(self, frame: Frame):

@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
 class CopyModel:
-    
+    @staticmethod
     def copy_files(src_folder, dest_folder):
         for filename in os.listdir(src_folder):
             src_file_path = os.path.join(src_folder, filename)
