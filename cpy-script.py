@@ -3,6 +3,9 @@ import shutil
 from datetime import datetime
 import jdatetime
 import logging
+from tkinter import Tk, Frame
+from tkinter.filedialog import askdirectory
+from view.gui import GUIArchitect
 
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
@@ -39,7 +42,11 @@ def copy_files(src_folder, dest_folder):
         shutil.copy2(src_file_path, dest_persian_month_folder)
 
 
-src_folder = "E:\Camera"
-dest_folder = "E:\Personal"
+def main():
+    root = Tk()
+    architect = GUIArchitect(root)
+    root.mainloop()
+    # copy_files(src_folder, dest_folder)
 
-copy_files(src_folder, dest_folder)
+
+main()
