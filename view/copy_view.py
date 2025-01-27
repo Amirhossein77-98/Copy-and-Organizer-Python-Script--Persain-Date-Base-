@@ -24,28 +24,27 @@ class GUIArchitect():
     
     def _origin_picker(self, source_entry):
         origin = askdirectory(title="Choose the source folder")
-        self.SOURCE_PATH = origin
+        self.SOURCE_PATH.set(origin)
         source_entry.delete(0, 'end')
-        source_entry.insert(0, self.SOURCE_PATH)
+        source_entry.insert(0, self.SOURCE_PATH.get())
 
     def _destination_picker(self, destination_entry):
         destination = askdirectory(title="Choose the destination folder")
-        self.DESTINATION_PATH = destination
+        self.DESTINATION_PATH.set(destination)
         destination_entry.delete(0, 'end')
-        destination_entry.insert(0, self.DESTINATION_PATH)
+        destination_entry.insert(0, self.DESTINATION_PATH.get())
 
     def _copy_ignite(self):
         if self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Shamsi)":
-            self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+            self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH.get(), destination_path=self.DESTINATION_PATH.get())
         elif self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Georgian)":
-            self.controller.new_georgian_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+            self.controller.new_georgian_copy_operation(source_path=self.SOURCE_PATH.get(), destination_path=self.DESTINATION_PATH.get())
         elif self.COMBOBOX_VALUE.get().strip() == "Simple Bulk Copy":
-            self.controller.new_bulk_copy(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+            self.controller.new_bulk_copy(source_path=self.SOURCE_PATH.get(), destination_path=self.DESTINATION_PATH.get())
 
     def main_window_builder(self):
         self.root.title("Organizer Script")
-        photo = PhotoImage(file="assets\\icon\\folder.png")
-        self.root.iconphoto(False, photo)
+        self.root.wm_iconbitmap('assets\\icon\\folder.ico')
         
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)

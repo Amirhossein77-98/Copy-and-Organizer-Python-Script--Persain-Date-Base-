@@ -20,17 +20,19 @@ def _copy_machine(filename, src_file_path, dest_folder):
     print(log_message)
     logging.info(log_message)
     try:
-        raise PermissionError
         shutil.copy2(src_file_path, dest_folder)
         return True
     except PermissionError:
-        CopyController.error_message(title="Permission Denied", msg="Your system doesn't give access to this folder.")
         return False
     
 class CopyModel:
     @staticmethod
     def copy_and_organize_files_shamsi_order(src_folder, dest_folder):
-        for filename in os.listdir(src_folder):
+        try:
+            listdir = os.listdir(src_folder)
+        except (FileNotFoundError, TypeError):
+            return False
+        for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
             modification_date, ad_year, ad_month, ad_day = _get_file_details(src_file_path)
             
@@ -48,12 +50,17 @@ class CopyModel:
                 os.makedirs(dest_persian_month_folder)
             
             result = _copy_machine(filename, src_file_path, dest_persian_month_folder)
-            if result == False:
-                return
+            if not result:
+                return False
+        return True
 
     @staticmethod
     def copy_and_organize_files_georgian_order(src_folder, dest_folder):
-        for filename in os.listdir(src_folder):
+        try:
+            listdir = os.listdir(src_folder)
+        except (FileNotFoundError, TypeError):
+            return False
+        for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
             modification_date, ad_year, *other = _get_file_details(src_file_path)
 
@@ -68,13 +75,19 @@ class CopyModel:
                 os.mkdir(dest_ad_month_folder)
             
             result = _copy_machine(filename, src_file_path, dest_ad_month_folder)
-            if result == False:
-                return
+            if not result:
+                return False
+        return True
 
     @staticmethod
     def simple_bulk_copy(src_folder, dest_folder):
-        for filename in os.listdir(src_folder):
+        try:
+            listdir = os.listdir(src_folder)
+        except (FileNotFoundError, TypeError):
+            return False
+        for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
             result = _copy_machine(filename, src_file_path, dest_folder)
-            if result == False:
-                return
+            if not result:
+                return False
+        return True
