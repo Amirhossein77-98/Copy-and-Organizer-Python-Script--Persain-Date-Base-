@@ -3,6 +3,7 @@ import shutil
 from datetime import datetime
 import jdatetime
 import logging
+
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
 def _get_file_details(src_file_path):
@@ -17,9 +18,11 @@ def _copy_machine(filename, src_file_path, dest_folder):
     log_message = f"{datetime.now()} - Copying {filename} to {dest_folder}"
     print(log_message)
     logging.info(log_message)
-
-    shutil.copy2(src_file_path, dest_folder)
-
+    try:
+        shutil.copy2(src_file_path, dest_folder)
+    except PermissionError:
+        pass
+    
 class CopyModel:
     @staticmethod
     def copy_and_organize_files_shamsi_order(src_folder, dest_folder):
@@ -60,3 +63,8 @@ class CopyModel:
             
             _copy_machine(filename, src_file_path, dest_ad_month_folder)
 
+    @staticmethod
+    def simple_bulk_copy(src_folder, dest_folder):
+        for filename in os.listdir(src_folder):
+            src_file_path = os.path.join(src_folder, filename)
+            _copy_machine(filename, src_file_path, dest_folder)

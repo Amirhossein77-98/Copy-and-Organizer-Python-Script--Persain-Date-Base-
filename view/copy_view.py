@@ -1,14 +1,14 @@
 from tkinter import *
 from customtkinter import *
-from tkinter import Tk, PhotoImage
 from tkinter.filedialog import askdirectory
-from models.copy_model import CopyModel
-from view.gui_logger import TextHandler
 import logging
+from view.gui_logger import TextHandler
+from controllers.copy_controller import CopyController
 
 class GUIArchitect():
-    def __init__(self, root):
+    def __init__(self, root, controller):
         self.root = root
+        self.controller = controller
         self.SOURCE_PATH = StringVar()
         self.DESTINATION_PATH = StringVar()
         self.COMBOBOX_VALUE = StringVar()
@@ -18,12 +18,9 @@ class GUIArchitect():
         self.main_window_builder()
 
     def check_operation_validity(self, *args):
-        print("called")
         if self.origin_entry.get().strip() and self.destination_entry.get().strip() and self.operation_mode.get().strip():
-            print("Good")
             self.start_button.configure(state='enabled')
         else:
-            print("Zort")
             self.start_button.configure(state="disabled")
     
     def _origin_picker(self, source_entry):
@@ -40,10 +37,11 @@ class GUIArchitect():
 
     def _copy_ignite(self):
         if self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Shamsi)":
-            CopyModel.copy_and_organize_files_shamsi_order(self.SOURCE_PATH, self.DESTINATION_PATH)
+            self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
         elif self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Georgian)":
-            CopyModel.copy_and_organize_files_georgian_order(self.SOURCE_PATH, self.DESTINATION_PATH)
-
+            self.controller.new_georgian_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+        elif self.COMBOBOX_VALUE.get().strip() == "Simple Bulk Copy":
+            self.controller.new_bulk_copy(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
 
     def main_window_builder(self):
         self.root.title("Organizer Script")
