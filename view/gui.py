@@ -11,8 +11,20 @@ class GUIArchitect():
         self.root = root
         self.SOURCE_PATH = StringVar()
         self.DESTINATION_PATH = StringVar()
+        self.COMBOBOX_VALUE = StringVar()
+        self.SOURCE_PATH.trace_add("write", self.check_operation_validity)
+        self.DESTINATION_PATH.trace_add("write", self.check_operation_validity)
+        self.COMBOBOX_VALUE.trace_add("write", self.check_operation_validity)
         self.main_window_builder()
 
+    def check_operation_validity(self, *args):
+        print("called")
+        if self.origin_entry.get().strip() and self.destination_entry.get().strip() and self.operation_mode.get().strip():
+            print("Good")
+            self.start_button.configure(state='enabled')
+        else:
+            print("Zort")
+            self.start_button.configure(state="disabled")
     
     def _origin_picker(self, source_entry):
         origin = askdirectory(title="Choose the source folder")
@@ -74,29 +86,30 @@ class GUIArchitect():
 
         origin_label = CTkLabel(frame, text="Origin:")
         origin_label.grid(row=1, column=0, sticky="W", padx=10)
-        origin_entry = CTkEntry(frame, textvariable=self.SOURCE_PATH, width=300)
-        origin_entry.grid(row=1, column=1, sticky="EW")
-        choose_origin_btn = CTkButton(frame, text="Browse", width=15, command=lambda: self._origin_picker(origin_entry))
+        self.origin_entry = CTkEntry(frame, textvariable=self.SOURCE_PATH, width=300)
+        self.origin_entry.grid(row=1, column=1, sticky="EW")
+        choose_origin_btn = CTkButton(frame, text="Browse", width=15, command=lambda: self._origin_picker(self.origin_entry))
         choose_origin_btn.grid(row=1, column=2)
         
         destination_label = CTkLabel(frame, text="Destination:")
         destination_label.grid(row=2, column=0, sticky="W", padx=10)
-        destination_entry = CTkEntry(frame, textvariable=self.DESTINATION_PATH, width=300)
-        destination_entry.grid(row=2, column=1, sticky="EW")
-        choose_destination_btn = CTkButton(frame, text="Browse", width=15, command=lambda: self._destination_picker(destination_entry))
+        self.destination_entry = CTkEntry(frame, textvariable=self.DESTINATION_PATH, width=300)
+        self.destination_entry.grid(row=2, column=1, sticky="EW")
+        choose_destination_btn = CTkButton(frame, text="Browse", width=15, command=lambda: self._destination_picker(self.destination_entry))
         choose_destination_btn.grid(row=2, column=2)
 
         operation_mode_label = CTkLabel(frame, text="Mode:")
         operation_mode_label.grid(row=3, column=0, sticky="W", padx=10)
-        operation_mode = CTkComboBox(frame, values=["Simple Bulk Copy", "Copy & Organize (Shamsi)", "Copy & Organize (Georgian)"],
+        self.operation_mode = CTkComboBox(frame, variable=self.COMBOBOX_VALUE, values=["Simple Bulk Copy", "Copy & Organize (Shamsi)", "Copy & Organize (Georgian)"],
                                      state='readonly')
-        operation_mode.grid(row=3, column=1, sticky="W")
+        self.operation_mode.grid(row=3, column=1, sticky="W")
+        
         
         empty_label2 = CTkLabel(frame, text='', height=4, font=CTkFont(size=5))
         empty_label2.grid(row=4)
 
-        start_button = CTkButton(frame, text="Copy!", command=self._copy_ignite, fg_color='darkred', hover_color='#4E0707',)
-        start_button.grid(row=5, column=1)
+        self.start_button = CTkButton(frame, text="Copy!", command=self._copy_ignite, fg_color='darkred', hover_color='#4E0707', state='disabled')
+        self.start_button.grid(row=5, column=1)
 
         empty_label2 = CTkLabel(frame, text='', height=2, font=CTkFont(size=5))
         empty_label2.grid(row=6)
