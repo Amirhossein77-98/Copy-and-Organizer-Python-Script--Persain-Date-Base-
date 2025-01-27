@@ -4,18 +4,8 @@ from datetime import datetime
 import jdatetime
 import logging
 logging.basicConfig(filename='copy.log', level=logging.INFO)
-from tkinter.filedialog import askdirectory
 
 class CopyModel:
-    @staticmethod
-    def origin_picker():
-        origin = askdirectory(title="Choose the source folder")
-        return origin
-
-    staticmethod
-    def destination_picker():
-        destination = askdirectory(title="Choose the destination folder")
-        return destination
     
     def copy_files(src_folder, dest_folder):
         for filename in os.listdir(src_folder):
