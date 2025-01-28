@@ -3,7 +3,6 @@ import shutil
 from datetime import datetime
 import jdatetime
 import logging
-from controllers.copy_controller import CopyController
 
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
@@ -23,6 +22,7 @@ def _copy_machine(filename, src_file_path, dest_folder):
         shutil.copy2(src_file_path, dest_folder)
         return True
     except PermissionError:
+        logging.error(f"{datetime.now()} - Your system does not allow to use this folder")
         return False
     
 class CopyModel:

@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import Tk
 from tkinter import messagebox
 
 class CopyController:

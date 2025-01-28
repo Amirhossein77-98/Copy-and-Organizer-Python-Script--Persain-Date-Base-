@@ -11,12 +11,13 @@ class GUIArchitect():
         self.SOURCE_PATH = StringVar()
         self.DESTINATION_PATH = StringVar()
         self.COMBOBOX_VALUE = StringVar()
-        self.SOURCE_PATH.trace_add("write", self.check_operation_validity)
-        self.DESTINATION_PATH.trace_add("write", self.check_operation_validity)
-        self.COMBOBOX_VALUE.trace_add("write", self.check_operation_validity)
+        self.SOURCE_PATH.trace_add("write", self._check_operation_validity)
+        self.DESTINATION_PATH.trace_add("write", self._check_operation_validity)
+        self.COMBOBOX_VALUE.trace_add("write", self._check_operation_validity)
+        self.OPERATION_MODES = ["Simple Bulk Copy", "Copy & Organize (Shamsi)", "Copy & Organize (Georgian)"]
         self.main_window_builder()
 
-    def check_operation_validity(self, *args):
+    def _check_operation_validity(self, *args):
         if self.origin_entry.get().strip() and self.destination_entry.get().strip() and self.operation_mode.get().strip():
             self.start_button.configure(state='enabled')
         else:
@@ -24,23 +25,23 @@ class GUIArchitect():
     
     def _origin_picker(self, source_entry):
         origin = askdirectory(title="Choose the source folder")
-        self.SOURCE_PATH.set(origin)
+        self.SOURCE_PATH = origin
         source_entry.delete(0, 'end')
-        source_entry.insert(0, self.SOURCE_PATH.get())
+        source_entry.insert(0, self.SOURCE_PATH)
 
     def _destination_picker(self, destination_entry):
         destination = askdirectory(title="Choose the destination folder")
-        self.DESTINATION_PATH.set(destination)
+        self.DESTINATION_PATH = destination
         destination_entry.delete(0, 'end')
-        destination_entry.insert(0, self.DESTINATION_PATH.get())
+        destination_entry.insert(0, self.DESTINATION_PATH)
 
     def _copy_ignite(self):
-        if self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Shamsi)":
-            self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH.get(), destination_path=self.DESTINATION_PATH.get())
-        elif self.COMBOBOX_VALUE.get().strip() == "Copy & Organize (Georgian)":
-            self.controller.new_georgian_copy_operation(source_path=self.SOURCE_PATH.get(), destination_path=self.DESTINATION_PATH.get())
-        elif self.COMBOBOX_VALUE.get().strip() == "Simple Bulk Copy":
-            self.controller.new_bulk_copy(source_path=self.SOURCE_PATH.get(), destination_path=self.DESTINATION_PATH.get())
+        if self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[1]:
+            self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+        elif self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[2]:
+            self.controller.new_georgian_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+        elif self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[0]:
+            self.controller.new_bulk_copy(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
 
     def main_window_builder(self):
         self.root.title("Organizer Script")
@@ -102,7 +103,7 @@ class GUIArchitect():
         operation_mode_label.grid(row=3, column=0, sticky="W", padx=10)
         self.operation_mode = CTkComboBox(frame,
                                      variable=self.COMBOBOX_VALUE,
-                                     values=["Simple Bulk Copy", "Copy & Organize (Shamsi)", "Copy & Organize (Georgian)"],
+                                     values=self.OPERATION_MODES,
                                      state='readonly',
                                      width=205)
         self.operation_mode.grid(row=3, column=1, sticky="W")
