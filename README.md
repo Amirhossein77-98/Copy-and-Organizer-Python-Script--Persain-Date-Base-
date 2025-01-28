@@ -2,6 +2,11 @@
 
 This is a Python script that copies files from a source folder to a destination folder based on their modification dates. The script uses the [jdatetime](https://pypi.org/project/jdatetime/) module to convert the Gregorian dates to the Persian (Jalali) calendar.
 
+<div align="center">
+    <img src="assets/screenshots/image0.png" alt="Main Window" width="300"/>
+    <img src="assets/screenshots/image1.png" alt="Main Window After Copy" width="300"/>
+</div>
+
 ## Requirements
 
 - Python 3.6 or higher
@@ -40,11 +45,15 @@ This is a Python script that copies files from a source folder to a destination 
 2. Use the GUI to select the source and destination folders:
     - Click the "Browse" button next to "Origin" to select the source folder.
     - Click the "Browse" button next to "Destination" to select the destination folder.
+    - Select the operation mode from the dropdown menu.
+    - Optionally, check the "Delete files after copy" checkbox if you want to delete the files after copying.
     - Click the "Copy!" button to start copying files.
 
-3. The script will copy each file from the source folder to a subfolder in the destination folder named as `{Persian month number} {Persian month name} {Persian year}`. For example, `10 Mehr 1402`.
-    - Folders name's prefix number is added to organize folders based on the AD Dates. So DAY would be equal to 1.
-    - If a file with the same name already exists in the destination folder, the script will rename the file by appending a counter to the filename (e.g., `filename_1.ext`, `filename_2.ext`, etc.).
+3. The script will copy each file from the source folder to a subfolder in the destination folder based on the selected operation mode:
+    - **Simple Bulk Copy**: Copies files without organizing.
+    - **Copy & Organize (Shamsi)**: Organizes files into folders based on the Persian (Jalali) calendar.
+    - **Copy & Organize (Shamsi with Georgian Years)**: Organizes files into folders based on the Persian (Jalali) calendar with Georgian years.
+    - **Copy & Organize (Georgian)**: Organizes files into folders based on the Gregorian calendar.
 
 4. The script will also create a log file named [copy.log](http://_vscodecontentref_/1) in the same directory as the script, which records the copying process and timestamps.
 
@@ -67,7 +76,7 @@ The destination folder will have these subfolders and files after running the sc
 
 ## Logging
 
-The script logs the copying process to both the console and a `Text` widget in the GUI. The log messages are colorized for better readability:
+The script logs the copying process to both the console and a [Text](http://_vscodecontentref_/2) widget in the GUI. The log messages are colorized for better readability:
 - Timestamp: Cyan
 - Operation mode: Red
 - Filename: Yellow
