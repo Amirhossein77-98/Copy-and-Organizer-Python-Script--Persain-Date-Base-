@@ -27,3 +27,9 @@ GEORGIAN_MONTHS_DICT = {
     "November": 11,
     "December": 12
 }
+
+COPY_MODES = {
+    "pp": "persian_persian",
+    "gp": "georgian_persian",
+    "gg": "georgian"
+}

@@ -8,24 +8,6 @@ from models.constants import *
 
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
-def _get_file_details(src_file_path):
-    modification_time = os.path.getmtime(src_file_path)
-    modification_date = datetime.fromtimestamp(modification_time)
-    ad_year = modification_date.year
-    ad_month = modification_date.month
-    ad_day = modification_date.day
-    return modification_date, ad_year, ad_month, ad_day
-
-def _copy_machine(filename, src_file_path, dest_folder):
-    log_message = f"{datetime.now()} ^ Copying|||{filename}|||to|||{dest_folder}"
-    print(log_message)
-    logging.info(log_message)
-    try:
-        shutil.copy2(src_file_path, dest_folder)
-        return True
-    except PermissionError:
-        logging.error(f"{datetime.now()} ^ Your|||system|||does|||not|||allow|||to|||use|||this|||folder")
-        return False
     
     
 class CopyModel:
@@ -35,6 +17,25 @@ class CopyModel:
     def _update_progress_bar(self, items_count, items_copied):
         percentage = items_copied / items_count
         self.controller.update_progress_bar(percentage)
+
+    def _get_file_details(self, src_file_path):
+        modification_time = os.path.getmtime(src_file_path)
+        modification_date = datetime.fromtimestamp(modification_time)
+        ad_year = modification_date.year
+        ad_month = modification_date.month
+        ad_day = modification_date.day
+        return modification_date, ad_year, ad_month, ad_day
+
+    def _copy_machine(self, filename, src_file_path, dest_folder):
+        log_message = f"{datetime.now()} ^ Copying|||{filename}|||to|||{dest_folder}"
+        print(log_message)
+        logging.info(log_message)
+        try:
+            shutil.copy2(src_file_path, dest_folder)
+            return True
+        except PermissionError:
+            logging.error(f"{datetime.now()} ^ Your|||system|||does|||not|||allow|||to|||use|||this|||folder")
+            return False
     
     def _valid_dir(self, src_folder):
         try:
@@ -45,7 +46,7 @@ class CopyModel:
             return False
         
     def _create_folders(self, dest_folder, mode, month_name, ad_year, persian_year=0):
-        if mode == "georgian" or mode == "georgian_persian":
+        if mode == COPY_MODES["gg"] or mode == COPY_MODES["gp"]:
             parent_year_folder = os.path.join(dest_folder, str(ad_year))
         else:
             parent_year_folder = os.path.join(dest_folder, str(persian_year))
@@ -53,9 +54,9 @@ class CopyModel:
         if not os.path.exists(parent_year_folder):
             os.makedirs(parent_year_folder)
 
-        if mode == "georgian_persian":
+        if mode == COPY_MODES["gp"]:
             sub_folder_format = f"{PERSIAN_MONTHS_DICT.get(month_name, 0)}- {month_name} {str(persian_year)}"
-        elif mode == "persian_persian":
+        elif mode == COPY_MODES["pp"]:
             sub_folder_format = f"{PERSIAN_MONTHS_DICT.get(month_name, 0)}- {month_name}"
         else:
             sub_folder_format = f"{GEORGIAN_MONTHS_DICT.get(month_name, 0)}- {month_name}"
@@ -77,16 +78,16 @@ class CopyModel:
         items_copied_count = 0
         for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
-            modification_date, ad_year, ad_month, ad_day = _get_file_details(src_file_path)
+            modification_date, ad_year, ad_month, ad_day = self._get_file_details(src_file_path)
             
             persian_date = jdatetime.date.fromgregorian(year=ad_year, month=ad_month, day=ad_day)
             persian_year = persian_date.year
             persian_month = persian_date.month
             persian_month_name = persian_date.strftime("%B")
             
-            destination_folder = self._create_folders(dest_folder, "georgian_persian", persian_month_name, ad_year, persian_year)
+            destination_folder = self._create_folders(dest_folder, COPY_MODES["gp"], persian_month_name, ad_year, persian_year)
             
-            result = _copy_machine(filename, src_file_path, destination_folder)
+            result = self._copy_machine(filename, src_file_path, destination_folder)
             if not result:
                 return False
             items_copied_count += 1
@@ -103,16 +104,16 @@ class CopyModel:
         items_copied_count = 0
         for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
-            modification_date, ad_year, ad_month, ad_day = _get_file_details(src_file_path)
+            modification_date, ad_year, ad_month, ad_day = self._get_file_details(src_file_path)
             
             persian_date = jdatetime.date.fromgregorian(year=ad_year, month=ad_month, day=ad_day)
             persian_year = persian_date.year
             persian_month = persian_date.month
             persian_month_name = persian_date.strftime("%B")
             
-            destination_folder = self._create_folders(dest_folder, "persian_persian", persian_month_name, ad_year, persian_year)
+            destination_folder = self._create_folders(dest_folder, COPY_MODES["pp"], persian_month_name, ad_year, persian_year)
             
-            result = _copy_machine(filename, src_file_path, destination_folder)
+            result = self._copy_machine(filename, src_file_path, destination_folder)
             if not result:
                 return False
             items_copied_count += 1
@@ -129,13 +130,13 @@ class CopyModel:
         items_copied_count = 0
         for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
-            modification_date, ad_year, *other = _get_file_details(src_file_path)
+            modification_date, ad_year, *other = self._get_file_details(src_file_path)
 
             ad_month_name = modification_date.strftime("%B")
 
-            destination_folder = self._create_folders(dest_folder, "georgian", ad_month_name, ad_year)
+            destination_folder = self._create_folders(dest_folder, COPY_MODES["gg"], ad_month_name, ad_year)
 
-            result = _copy_machine(filename, src_file_path, destination_folder)
+            result = self._copy_machine(filename, src_file_path, destination_folder)
             if not result:
                 return False
             items_copied_count += 1
@@ -153,7 +154,7 @@ class CopyModel:
         items_copied_count = 0
         for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
-            result = _copy_machine(filename, src_file_path, dest_folder)
+            result = self._copy_machine(filename, src_file_path, dest_folder)
             if not result:
                 return False
             items_copied_count += 1
