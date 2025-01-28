@@ -21,9 +21,16 @@ class CopyController:
         if not result:
             self.error_message(title="Operation Failed", msg="Failed to perform bulk copy.")
 
+    def update_progress_bar(self, value):
+        self.view._progress_state(value)
+
+    def delete_files_after_copy(self, source):
+        result = self.model.delete_files_after_copy(source)
+        if result[0]:
+            messagebox.showinfo(title=result[1], message=result[2])
+        else:
+            CopyController.error_message(title=result[1], msg=result[2])
+
     @staticmethod
     def error_message(title, msg):
         messagebox.showerror(title=title, message=msg)
-
-    def update_progress_bar(self, value):
-        self.view._progress_state(value)

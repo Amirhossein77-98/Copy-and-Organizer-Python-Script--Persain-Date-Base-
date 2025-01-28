@@ -65,6 +65,9 @@ class GUIArchitect():
         elif self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[0]:
             self.controller.new_bulk_copy(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
 
+        if self.CHECKBOX_VALUE.get():
+            self.controller.delete_files_after_copy(self.SOURCE_PATH)
+
     def main_window_builder(self):
         self.root.title("Organizer Script")
         self.root.wm_iconbitmap('assets\\icon\\folder.ico')

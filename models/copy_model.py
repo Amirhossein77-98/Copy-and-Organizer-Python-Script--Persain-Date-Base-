@@ -3,7 +3,9 @@ import shutil
 from datetime import datetime
 import jdatetime
 import logging
-from controllers.copy_controller import CopyController
+import stat
+import time
+from tkinter import messagebox
 
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
@@ -115,3 +117,37 @@ class CopyModel:
             items_copied_count += 1
             self._update_progress_bar(items_count, items_copied_count)
         return True
+    
+    def delete_files_after_copy(self, source):
+        max_retries = 3
+        retry_delay = 1  # seconds
+
+        for attempt in range(max_retries):
+            try:
+                # Ensure all file handles are closed
+                import gc
+                gc.collect()
+                time.sleep(retry_delay)
+                
+                if os.path.isfile(source):
+                    os.chmod(source, 0o777)  # Give full permissions
+                    os.remove(source)
+                elif os.path.isdir(source):
+                    for root, dirs, files in os.walk(source):
+                        for f in files:
+                            filepath = os.path.join(root, f)
+                            try:
+                                os.chmod(filepath, 0o777)
+                            except:
+                                pass
+                    shutil.rmtree(source, ignore_errors=True)
+                return (True, "Success", "All files and the folders deleted successfully.")
+                
+            except PermissionError as e:
+                if attempt == max_retries - 1:
+                    return (False, "Error", f"Could not delete {source} after {max_retries} attempts")
+                time.sleep(retry_delay)
+                continue
+                
+            except Exception as e:
+                return (False, "Error", f"Unexpected error: {str(e)}")
