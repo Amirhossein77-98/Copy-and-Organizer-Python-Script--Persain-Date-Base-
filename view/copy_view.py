@@ -88,7 +88,8 @@ class GUIArchitect():
         frame.rowconfigure(7, weight=1, pad=15)
         frame.columnconfigure(0, weight=1, pad=10)
         frame.columnconfigure(1, weight=2, pad=10)
-        frame.columnconfigure(2, weight=1, pad=40)
+        frame.columnconfigure(2, weight=2, pad=10)
+        frame.columnconfigure(3, weight=1, pad=40)
         
         empty_label1 = CTkLabel(frame, text='', height=2, font=CTkFont(size=5))
         empty_label1.grid(row=0)
@@ -96,16 +97,16 @@ class GUIArchitect():
         origin_label = CTkLabel(frame, text="Origin:")
         origin_label.grid(row=1, column=0, sticky="W", padx=10)
         self.origin_entry = CTkEntry(frame, textvariable=self.SOURCE_PATH, width=300)
-        self.origin_entry.grid(row=1, column=1, sticky="EW")
+        self.origin_entry.grid(row=1, column=1, columnspan=2, sticky="EW")
         choose_origin_btn = CTkButton(frame, text="Browse", width=15, command=lambda: self._origin_picker(self.origin_entry))
-        choose_origin_btn.grid(row=1, column=2)
+        choose_origin_btn.grid(row=1, column=3)
         
         destination_label = CTkLabel(frame, text="Destination:")
         destination_label.grid(row=2, column=0, sticky="W", padx=10)
         self.destination_entry = CTkEntry(frame, textvariable=self.DESTINATION_PATH, width=300)
-        self.destination_entry.grid(row=2, column=1, sticky="EW")
+        self.destination_entry.grid(row=2, column=1, columnspan=2, sticky="EW")
         choose_destination_btn = CTkButton(frame, text="Browse", width=15, command=lambda: self._destination_picker(self.destination_entry))
-        choose_destination_btn.grid(row=2, column=2)
+        choose_destination_btn.grid(row=2, column=3)
 
         operation_mode_label = CTkLabel(frame, text="Mode:")
         operation_mode_label.grid(row=3, column=0, sticky="W", padx=10)
@@ -115,21 +116,23 @@ class GUIArchitect():
                                      state='readonly',
                                      width=205)
         self.operation_mode.grid(row=3, column=1, sticky="W")
+        self.delete_files_checkbox = CTkCheckBox(frame, text="Delete files after copy")
+        self.delete_files_checkbox.grid(row=3, column=2)
         
         
         empty_label2 = CTkLabel(frame, text='', height=4, font=CTkFont(size=5))
         empty_label2.grid(row=4)
 
         self.start_button = CTkButton(frame, text="Copy!", command=self._copy_ignite, fg_color='darkred', hover_color='#4E0707', state='disabled')
-        self.start_button.grid(row=5, column=1)
+        self.start_button.grid(row=5, column=1, columnspan=2)
 
         progressbar_label = CTkLabel(frame, text="Progress:")
         progressbar_label.grid(row=6, column=0, sticky="W", padx=10)
         self.progressbar = CTkProgressBar(frame, width=350)
-        self.progressbar.grid(row=6, column=1)
+        self.progressbar.grid(row=6, column=1, columnspan=2)
         self.progressbar.set(0)
         self.progress_label = CTkLabel(frame, text="%0")
-        self.progress_label.grid(row=6, column=2, sticky="W", padx=10)
+        self.progress_label.grid(row=6, column=3, sticky="W", padx=10)
 
         empty_label2 = CTkLabel(frame, text='', height=2, font=CTkFont(size=5))
         empty_label2.grid(row=7)
@@ -145,7 +148,7 @@ class GUIArchitect():
         self.log_text.insert(END, "Logs:\n")
 
         scrollbar = CTkScrollbar(frame, command=self.log_text.yview)
-        scrollbar.grid(row=1, column=1, sticky="ns")
+        scrollbar.grid(row=1, column=1, columnspan=2, sticky="ns")
         self.log_text.config(yscrollcommand=scrollbar.set)
 
         self.log_text.tag_configure('timestamp', foreground='cyan')
