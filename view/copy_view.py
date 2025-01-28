@@ -74,7 +74,7 @@ class GUIArchitect():
 
     def main_window_builder(self):
         self.root.title("Organizer Script")
-        self.root.wm_iconbitmap('assets\\icon\\folder.ico')
+        # self.root.wm_iconbitmap('assets\\icon\\folder.ico')
         
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
