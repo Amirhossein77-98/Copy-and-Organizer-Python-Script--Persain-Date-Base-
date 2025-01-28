@@ -6,6 +6,11 @@ class CopyController:
         self.model = model
         self.view = view
 
+    def new_shamsi_georgian_copy_operation(self, source_path, destination_path):
+        result = self.model.copy_and_organize_files_shamsi_order_with_georgian_years(source_path, destination_path)
+        if not result:
+            self.error_message(title="Operation Failed", msg="Failed to copy and organize files in Shamsi order.")
+    
     def new_shamsi_copy_operation(self, source_path, destination_path):
         result = self.model.copy_and_organize_files_shamsi_order(source_path, destination_path)
         if not result:

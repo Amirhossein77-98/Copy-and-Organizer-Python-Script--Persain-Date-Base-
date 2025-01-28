@@ -17,7 +17,7 @@ class GUIArchitect():
         self.SOURCE_PATH.trace_add("write", self._check_operation_validity)
         self.DESTINATION_PATH.trace_add("write", self._check_operation_validity)
         self.COMBOBOX_VALUE.trace_add("write", self._check_operation_validity)
-        self.OPERATION_MODES = ["Simple Bulk Copy", "Copy & Organize (Shamsi)", "Copy & Organize (Georgian)"]
+        self.OPERATION_MODES = ["Simple Bulk Copy","Copy & Organize (Shamsi)", "Copy & Organize (Shamsi with Georgian Years)", "Copy & Organize (Georgian)"]
         self.main_window_builder()
 
     def _check_operation_validity(self, *args):
@@ -59,10 +59,12 @@ class GUIArchitect():
 
 
     def _copy_ignite(self):
-        if self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[1]:
-            self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
-        elif self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[2]:
+        if self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[2]:
+            self.controller.new_shamsi_georgian_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+        elif self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[3]:
             self.controller.new_georgian_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
+        elif self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[1]:
+            self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
         elif self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[0]:
             self.controller.new_bulk_copy(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
 
