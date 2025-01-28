@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from customtkinter import *
 from tkinter.filedialog import askdirectory
 import logging
@@ -11,6 +12,8 @@ class GUIArchitect():
         self.SOURCE_PATH = StringVar()
         self.DESTINATION_PATH = StringVar()
         self.COMBOBOX_VALUE = StringVar()
+        self.CHECKBOX_VALUE = IntVar()
+        self.CHECKBOX_VALUE.trace_add("write", lambda *args: self._check_box_change_tracker())
         self.SOURCE_PATH.trace_add("write", self._check_operation_validity)
         self.DESTINATION_PATH.trace_add("write", self._check_operation_validity)
         self.COMBOBOX_VALUE.trace_add("write", self._check_operation_validity)
@@ -22,7 +25,20 @@ class GUIArchitect():
             self.start_button.configure(state='enabled')
         else:
             self.start_button.configure(state="disabled")
-    
+
+    def _check_box_change_tracker(self, *args):
+        if self.CHECKBOX_VALUE.get():
+            sure_to_delete = messagebox.askyesno(title="Sure to delete files?", message="Are you sure you want to delete the files after copy?")
+            if sure_to_delete:
+                self.CHECKBOX_VALUE.set(1)
+                self.delete_files_checkbox.select()
+            else:
+                self.CHECKBOX_VALUE.set(0)
+                self.delete_files_checkbox.deselect()
+        else:
+            self.CHECKBOX_VALUE.set(0)
+            self.delete_files_checkbox.deselect()
+
     def _origin_picker(self, source_entry):
         origin = askdirectory(title="Choose the source folder")
         self.SOURCE_PATH = origin
@@ -39,7 +55,6 @@ class GUIArchitect():
         self.progress_label.configure(text = f"%{(state * 100):.0f}")
         print(state)
         self.progressbar.set(state)
-        self.root.update_idletasks()
 
 
     def _copy_ignite(self):
@@ -116,9 +131,9 @@ class GUIArchitect():
                                      state='readonly',
                                      width=205)
         self.operation_mode.grid(row=3, column=1, sticky="W")
-        self.delete_files_checkbox = CTkCheckBox(frame, text="Delete files after copy")
-        self.delete_files_checkbox.grid(row=3, column=2)
         
+        self.delete_files_checkbox = CTkCheckBox(frame, text="Delete files after copy", variable=self.CHECKBOX_VALUE)
+        self.delete_files_checkbox.grid(row=3, column=2)
         
         empty_label2 = CTkLabel(frame, text='', height=4, font=CTkFont(size=5))
         empty_label2.grid(row=4)
