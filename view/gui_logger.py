@@ -10,7 +10,7 @@ class TextHandler(logging.Handler):
         timestamp = timestamp.split('.')[0]
         operation_mode, file_name, to, *destination = operation.split(' ')
 
-        if operation_mode == "Your":
+        if operation_mode in ["Your", "File"]:
             self.text_widget.insert('end', timestamp, 'timestamp')
             self.text_widget.insert('end', ' - ', 'dash')
             self.text_widget.insert('end', operation_mode + ' ', 'operationmode')

@@ -3,6 +3,7 @@ import shutil
 from datetime import datetime
 import jdatetime
 import logging
+from controllers.copy_controller import CopyController
 
 logging.basicConfig(filename='copy.log', level=logging.INFO)
 
@@ -25,13 +26,24 @@ def _copy_machine(filename, src_file_path, dest_folder):
         logging.error(f"{datetime.now()} - Your system does not allow to use this folder")
         return False
     
+    
 class CopyModel:
-    @staticmethod
-    def copy_and_organize_files_shamsi_order(src_folder, dest_folder):
+    def __init__(self, controller):
+        self.controller = controller
+
+    def _update_progress_bar(self, items_count, items_copied):
+        percentage = (items_copied // items_count) * 100
+        self.controller.update_progress_bar(percentage)
+
+    def copy_and_organize_files_shamsi_order(self, src_folder, dest_folder):
         try:
             listdir = os.listdir(src_folder)
         except (FileNotFoundError, TypeError):
+            logging.error(f"{datetime.now()} - File or Folder not found.")
             return False
+
+        items_count = len(listdir)
+        items_copied_count = 0
         for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
             modification_date, ad_year, ad_month, ad_day = _get_file_details(src_file_path)
@@ -52,14 +64,19 @@ class CopyModel:
             result = _copy_machine(filename, src_file_path, dest_persian_month_folder)
             if not result:
                 return False
+            items_copied_count += 1
+            self._update_progress_bar(items_count, items_copied_count)
         return True
 
-    @staticmethod
-    def copy_and_organize_files_georgian_order(src_folder, dest_folder):
+    def copy_and_organize_files_georgian_order(self, src_folder, dest_folder):
         try:
             listdir = os.listdir(src_folder)
         except (FileNotFoundError, TypeError):
+            logging.error(f"{datetime.now()} - File or Folder not found.")
             return False
+        
+        items_count = len(listdir)
+        items_copied_count = 0
         for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
             modification_date, ad_year, *other = _get_file_details(src_file_path)
@@ -77,17 +94,24 @@ class CopyModel:
             result = _copy_machine(filename, src_file_path, dest_ad_month_folder)
             if not result:
                 return False
+            items_copied_count += 1
+            self._update_progress_bar(items_count, items_copied_count)
         return True
 
-    @staticmethod
-    def simple_bulk_copy(src_folder, dest_folder):
+    def simple_bulk_copy(self, src_folder, dest_folder):
         try:
             listdir = os.listdir(src_folder)
         except (FileNotFoundError, TypeError):
+            logging.error(f"{datetime.now()} - File or Folder not found.")
             return False
+        
+        items_count = len(listdir)
+        items_copied_count = 0
         for filename in listdir:
             src_file_path = os.path.join(src_folder, filename)
             result = _copy_machine(filename, src_file_path, dest_folder)
             if not result:
                 return False
+            items_copied_count += 1
+            self._update_progress_bar(items_count, items_copied_count)
         return True

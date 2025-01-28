@@ -35,6 +35,10 @@ class GUIArchitect():
         destination_entry.delete(0, 'end')
         destination_entry.insert(0, self.DESTINATION_PATH)
 
+    def _progress_state(self, state):
+        self.progressbar.set(state)
+
+
     def _copy_ignite(self):
         if self.COMBOBOX_VALUE.get().strip() == self.OPERATION_MODES[1]:
             self.controller.new_shamsi_copy_operation(source_path=self.SOURCE_PATH, destination_path=self.DESTINATION_PATH)
@@ -78,6 +82,7 @@ class GUIArchitect():
         frame.rowconfigure(4, weight=1, pad=15)
         frame.rowconfigure(5, weight=1, pad=15)
         frame.rowconfigure(6, weight=1, pad=15)
+        frame.rowconfigure(7, weight=1, pad=15)
         frame.columnconfigure(0, weight=1, pad=10)
         frame.columnconfigure(1, weight=2, pad=10)
         frame.columnconfigure(2, weight=1, pad=40)
@@ -115,8 +120,13 @@ class GUIArchitect():
         self.start_button = CTkButton(frame, text="Copy!", command=self._copy_ignite, fg_color='darkred', hover_color='#4E0707', state='disabled')
         self.start_button.grid(row=5, column=1)
 
+        progressbar_label = CTkLabel(frame, text="Progress:")
+        progressbar_label.grid(row=6, column=0, sticky="W", padx=10)
+        self.progressbar = CTkProgressBar(frame, width=350)
+        self.progressbar.grid(row=6, column=1)
+
         empty_label2 = CTkLabel(frame, text='', height=2, font=CTkFont(size=5))
-        empty_label2.grid(row=6)
+        empty_label2.grid(row=7)
 
     def output_frame_config(self, frame: CTkFrame):
         frame.grid_rowconfigure(0, weight=1)
@@ -126,7 +136,7 @@ class GUIArchitect():
 
         self.log_text = Text(frame, wrap='none', height=frame.winfo_height(), bg="black", foreground='white', font=15)
         self.log_text.grid(row=1, column=0, sticky="nsew")
-        self.log_text.insert(END, "Log will appear here\n")
+        self.log_text.insert(END, "Logs:\n")
 
         scrollbar = CTkScrollbar(frame, command=self.log_text.yview)
         scrollbar.grid(row=1, column=1, sticky="ns")

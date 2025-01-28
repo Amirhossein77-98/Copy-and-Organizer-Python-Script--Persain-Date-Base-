@@ -24,3 +24,6 @@ class CopyController:
     @staticmethod
     def error_message(title, msg):
         messagebox.showerror(title=title, message=msg)
+
+    def update_progress_bar(self, value):
+        self.view._progress_state(value)

@@ -5,8 +5,9 @@ from customtkinter import CTk
 
 def main():
     root = CTk()
-    model = CopyModel()
-    controller = CopyController(model, None)
+    controller = CopyController(None, None)
+    model = CopyModel(controller)
+    controller.model = model
     view = GUIArchitect(root, controller)
     controller.view = view
     root.mainloop()
