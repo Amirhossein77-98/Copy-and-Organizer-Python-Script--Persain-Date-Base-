@@ -60,7 +60,7 @@ class GUIArchitect():
         self.root.rowconfigure(2, weight=1)
         
         self.root.minsize(700, 500)
-        # self.root.maxsize(600, 400)
+        self.root.maxsize(600, 400)
         
         title_frame = CTkFrame(self.root, bg_color='transparent')
         title_frame.grid(column=0, row=0, pady=0)
@@ -147,9 +147,13 @@ class GUIArchitect():
         self.log_text.grid(row=1, column=0, sticky="nsew")
         self.log_text.insert(END, "Logs:\n")
 
-        scrollbar = CTkScrollbar(frame, command=self.log_text.yview)
-        scrollbar.grid(row=1, column=1, columnspan=2, sticky="ns")
-        self.log_text.config(yscrollcommand=scrollbar.set)
+        y_scrollbar = CTkScrollbar(frame, command=self.log_text.yview)
+        y_scrollbar.grid(row=1, column=1, sticky="ns")
+        self.log_text.config(yscrollcommand=y_scrollbar.set)
+
+        x_scrollbar = CTkScrollbar(frame, command=self.log_text.xview, orientation='horizontal')
+        x_scrollbar.grid(row=2, column=0, sticky="ew")
+        self.log_text.config(xscrollcommand=x_scrollbar.set)
 
         self.log_text.tag_configure('timestamp', foreground='cyan')
         self.log_text.tag_configure('operationmode', foreground='red')
