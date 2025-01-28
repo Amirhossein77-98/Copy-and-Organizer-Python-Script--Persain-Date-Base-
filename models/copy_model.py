@@ -4,38 +4,9 @@ from datetime import datetime
 import jdatetime
 import logging
 import time
+from models.constants import *
 
 logging.basicConfig(filename='copy.log', level=logging.INFO)
-
-PERSIAN_MONTHS_DICT = {
-    "Farvardin": 1,
-    "Ordibehesht": 2,
-    "Khordad": 3,
-    "Tir": 4,
-    "Mordad": 5,
-    "Shahrivar": 6,
-    "Mehr": 7,
-    "Aban": 8,
-    "Azar": 9,
-    "Dey": 10,
-    "Bahman": 11,
-    "Esfand": 12
-}
-
-GEORGIAN_MONTHS_DICT = {
-    "January": 1,
-    "February": 2,
-    "March": 3,
-    "April": 4,
-    "May": 5,
-    "June": 6,
-    "July": 7,
-    "Auguest": 8,
-    "September": 9,
-    "October": 10,
-    "November": 11,
-    "December": 12
-}
 
 def _get_file_details(src_file_path):
     modification_time = os.path.getmtime(src_file_path)
@@ -72,6 +43,29 @@ class CopyModel:
         except (FileNotFoundError, TypeError):
             logging.error(f"{datetime.now()} ^ File|||or|||Folder|||not|||found.")
             return False
+        
+    def _create_folders(self, dest_folder, mode, month_name, ad_year, persian_year=0):
+        if mode == "georgian" or mode == "georgian_persian":
+            parent_year_folder = os.path.join(dest_folder, str(ad_year))
+        else:
+            parent_year_folder = os.path.join(dest_folder, str(persian_year))
+
+        if not os.path.exists(parent_year_folder):
+            os.makedirs(parent_year_folder)
+
+        if mode == "georgian_persian":
+            sub_folder_format = f"{PERSIAN_MONTHS_DICT.get(month_name, 0)}- {month_name} {str(persian_year)}"
+        elif mode == "persian_persian":
+            sub_folder_format = f"{PERSIAN_MONTHS_DICT.get(month_name, 0)}- {month_name}"
+        else:
+            sub_folder_format = f"{GEORGIAN_MONTHS_DICT.get(month_name, 0)}- {month_name}"
+       
+        dest_month_folder = os.path.join(parent_year_folder, sub_folder_format)
+        
+        if not os.path.exists(dest_month_folder):
+            os.makedirs(dest_month_folder)
+        
+        return dest_month_folder
 
     def copy_and_organize_files_shamsi_order_with_georgian_years(self, src_folder, dest_folder):
         if self._valid_dir(src_folder):
@@ -90,15 +84,9 @@ class CopyModel:
             persian_month = persian_date.month
             persian_month_name = persian_date.strftime("%B")
             
-            dest_ad_year_folder = os.path.join(dest_folder, str(ad_year))
-            if not os.path.exists(dest_ad_year_folder):
-                os.makedirs(dest_ad_year_folder)
-
-            dest_persian_month_folder = os.path.join(dest_ad_year_folder, f"{PERSIAN_MONTHS_DICT.get(persian_month_name, 0)}- {persian_month_name} {str(persian_year)}")
-            if not os.path.exists(dest_persian_month_folder):
-                os.makedirs(dest_persian_month_folder)
+            destination_folder = self._create_folders(dest_folder, "georgian_persian", persian_month_name, ad_year, persian_year)
             
-            result = _copy_machine(filename, src_file_path, dest_persian_month_folder)
+            result = _copy_machine(filename, src_file_path, destination_folder)
             if not result:
                 return False
             items_copied_count += 1
@@ -122,15 +110,9 @@ class CopyModel:
             persian_month = persian_date.month
             persian_month_name = persian_date.strftime("%B")
             
-            dest_persian_year_folder = os.path.join(dest_folder, str(persian_year))
-            if not os.path.exists(dest_persian_year_folder):
-                os.makedirs(dest_persian_year_folder)
-
-            dest_persian_month_folder = os.path.join(dest_persian_year_folder, f"{PERSIAN_MONTHS_DICT.get(persian_month_name, 0)}- {persian_month_name}")
-            if not os.path.exists(dest_persian_month_folder):
-                os.makedirs(dest_persian_month_folder)
+            destination_folder = self._create_folders(dest_folder, "persian_persian", persian_month_name, ad_year, persian_year)
             
-            result = _copy_machine(filename, src_file_path, dest_persian_month_folder)
+            result = _copy_machine(filename, src_file_path, destination_folder)
             if not result:
                 return False
             items_copied_count += 1
@@ -142,7 +124,6 @@ class CopyModel:
             listdir = os.listdir(src_folder)
         else:
             return False
-
         
         items_count = len(listdir)
         items_copied_count = 0
@@ -152,15 +133,9 @@ class CopyModel:
 
             ad_month_name = modification_date.strftime("%B")
 
-            dest_ad_year_folder = os.path.join(dest_folder, str(ad_year))
-            if not os.path.exists(dest_ad_year_folder):
-                os.mkdir(dest_ad_year_folder)
+            destination_folder = self._create_folders(dest_folder, "georgian", ad_month_name, ad_year)
 
-            dest_ad_month_folder = os.path.join(dest_ad_year_folder, f"{GEORGIAN_MONTHS_DICT.get(ad_month_name, 0)}- {ad_month_name}")
-            if not os.path.exists(dest_ad_month_folder):
-                os.mkdir(dest_ad_month_folder)
-            
-            result = _copy_machine(filename, src_file_path, dest_ad_month_folder)
+            result = _copy_machine(filename, src_file_path, destination_folder)
             if not result:
                 return False
             items_copied_count += 1
