@@ -36,7 +36,10 @@ class GUIArchitect():
         destination_entry.insert(0, self.DESTINATION_PATH)
 
     def _progress_state(self, state):
+        self.progress_label.configure(text = f"%{(state * 100):.0f}")
+        print(state)
         self.progressbar.set(state)
+        self.root.update_idletasks()
 
 
     def _copy_ignite(self):
@@ -124,6 +127,9 @@ class GUIArchitect():
         progressbar_label.grid(row=6, column=0, sticky="W", padx=10)
         self.progressbar = CTkProgressBar(frame, width=350)
         self.progressbar.grid(row=6, column=1)
+        self.progressbar.set(0)
+        self.progress_label = CTkLabel(frame, text="%0")
+        self.progress_label.grid(row=6, column=2, sticky="W", padx=10)
 
         empty_label2 = CTkLabel(frame, text='', height=2, font=CTkFont(size=5))
         empty_label2.grid(row=7)

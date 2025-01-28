@@ -6,9 +6,9 @@ class TextHandler(logging.Handler):
 
     def emit(self, record):
         msg = self.format(record)
-        timestamp, operation = msg.split(' - ')
+        timestamp, *operation = msg.split(' ^ ')
         timestamp = timestamp.split('.')[0]
-        operation_mode, file_name, to, *destination = operation.split(' ')
+        operation_mode, file_name, to, *destination = ' '.join(operation).split('|||')
 
         if operation_mode in ["Your", "File"]:
             self.text_widget.insert('end', timestamp, 'timestamp')

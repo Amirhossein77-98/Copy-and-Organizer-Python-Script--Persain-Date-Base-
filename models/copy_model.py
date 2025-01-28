@@ -16,14 +16,14 @@ def _get_file_details(src_file_path):
     return modification_date, ad_year, ad_month, ad_day
 
 def _copy_machine(filename, src_file_path, dest_folder):
-    log_message = f"{datetime.now()} - Copying {filename} to {dest_folder}"
+    log_message = f"{datetime.now()} ^ Copying|||{filename}|||to|||{dest_folder}"
     print(log_message)
     logging.info(log_message)
     try:
         shutil.copy2(src_file_path, dest_folder)
         return True
     except PermissionError:
-        logging.error(f"{datetime.now()} - Your system does not allow to use this folder")
+        logging.error(f"{datetime.now()} ^ Your|||system|||does|||not|||allow|||to|||use|||this|||folder")
         return False
     
     
@@ -32,14 +32,14 @@ class CopyModel:
         self.controller = controller
 
     def _update_progress_bar(self, items_count, items_copied):
-        percentage = (items_copied // items_count) * 100
+        percentage = items_copied / items_count
         self.controller.update_progress_bar(percentage)
 
     def copy_and_organize_files_shamsi_order(self, src_folder, dest_folder):
         try:
             listdir = os.listdir(src_folder)
         except (FileNotFoundError, TypeError):
-            logging.error(f"{datetime.now()} - File or Folder not found.")
+            logging.error(f"{datetime.now()} ^ File|||or|||Folder|||not|||found.")
             return False
 
         items_count = len(listdir)
@@ -57,7 +57,7 @@ class CopyModel:
             if not os.path.exists(dest_ad_year_folder):
                 os.makedirs(dest_ad_year_folder)
 
-            dest_persian_month_folder = os.path.join(dest_ad_year_folder, f"{str(persian_month + 3 if persian_month < 10 else persian_month - 11)} {persian_month_name} {str(persian_year)}")
+            dest_persian_month_folder = os.path.join(dest_ad_year_folder, f"{str(persian_month + 3 if persian_month < 10 else persian_month ^ 11)} {persian_month_name} {str(persian_year)}")
             if not os.path.exists(dest_persian_month_folder):
                 os.makedirs(dest_persian_month_folder)
             
@@ -72,7 +72,7 @@ class CopyModel:
         try:
             listdir = os.listdir(src_folder)
         except (FileNotFoundError, TypeError):
-            logging.error(f"{datetime.now()} - File or Folder not found.")
+            logging.error(f"{datetime.now()} ^ File|||or|||Folder|||not|||found.")
             return False
         
         items_count = len(listdir)
@@ -102,7 +102,7 @@ class CopyModel:
         try:
             listdir = os.listdir(src_folder)
         except (FileNotFoundError, TypeError):
-            logging.error(f"{datetime.now()} - File or Folder not found.")
+            logging.error(f"{datetime.now()} ^ File|||or|||Folder|||not|||found.")
             return False
         
         items_count = len(listdir)
