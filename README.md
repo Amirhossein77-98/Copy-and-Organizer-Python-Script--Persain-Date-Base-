@@ -9,7 +9,7 @@ This is a Python script that copies files from a source folder to a destination 
 
 ## Download
 
-<span><a link="https://objects.githubusercontent.com/github-production-release-asset-2e65be/688850101/06ab4281-6aa6-4ccd-a632-8e4df71ee2c9?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20250128%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250128T163926Z&X-Amz-Expires=300&X-Amz-Signature=7d44bfe2d64d87dc9543887f6c89909b1d479da86ee4d9be2bfc178efcad5cca&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dcopy.script.exe">Download for Windows</span>
+[Download for Windows](https://objects.githubusercontent.com/github-production-release-asset-2e65be/688850101/06ab4281-6aa6-4ccd-a632-8e4df71ee2c9?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20250128%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250128T163926Z&X-Amz-Expires=300&X-Amz-Signature=7d44bfe2d64d87dc9543887f6c89909b1d479da86ee4d9be2bfc178efcad5cca&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dcopy.script.exe")
 
 ## Requirements
 
