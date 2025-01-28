@@ -53,8 +53,9 @@ class GUIArchitect():
 
     def _progress_state(self, state):
         self.progress_label.configure(text = f"%{(state * 100):.0f}")
-        print(state)
         self.progressbar.set(state)
+        if state == 1:
+            messagebox.showinfo("Success", "All files and folders copied and organized successfully.")
 
 
     def _copy_ignite(self):

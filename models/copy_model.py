@@ -141,7 +141,7 @@ class CopyModel:
                             except:
                                 pass
                     shutil.rmtree(source, ignore_errors=True)
-                return (True, "Success", "All files and the folders deleted successfully.")
+                return (True, "Success", "All files and the folders copied and deleted successfully.")
                 
             except PermissionError as e:
                 if attempt == max_retries - 1:
